@@ -88,7 +88,6 @@
   }
   li {
     padding-left: 0.8rem;
-    border-left: 4px solid #0078d4;
     color: #111;
     font-weight: 600;
     letter-spacing: 0.05em;
@@ -99,7 +98,7 @@
     font-weight: 700;
     color: #0078d4;
     text-align: center;
-    font-size: 1.2rem;
+    font-size: 0.6rem; /* smaller font size */
     letter-spacing: 0.1em;
   }
   #buttons-container {
@@ -108,6 +107,7 @@
   }
   #buttons-container button {
     margin: 0 1rem;
+    font-size: 0.6rem; /* smaller font size for export/import */
   }
   #pagination {
     margin-top: 1rem;
@@ -137,7 +137,7 @@
     color: #0078d4;
     letter-spacing: 0.1em;
     margin: 0 1rem;
-    font-size: 1.1rem;
+    font-size: 0.6rem; /* smaller font size */
   }
   /* Responsive */
   @media (max-width: 700px) {
@@ -204,12 +204,13 @@
 
   <div id="buttons-container">
     <button id="printBtn" class="link-button">PRINT YOUR LIST</button>
-    <button id="exportBtn" class="link-button">EXPORT LIST</button>
-    <button id="importBtn" class="link-button">IMPORT LIST</button>
+    <button id="exportBtn" class="link-button">EXPORT</button>
+    <button id="importBtn" class="link-button">IMPORT</button>
     <input type="file" id="importFile" accept=".json" style="display:none" />
   </div>
 
 <script>
+  // JavaScript remains unchanged, only style changes for font size on export/import and counters
   const input = document.getElementById('itemInput');
   const addBtn = document.getElementById('addBtn');
   const joyList = document.getElementById('joyList');
@@ -233,7 +234,7 @@
   }
 
   function updateProgress() {
-    progress.textContent = `${items.length} / ${MAX_ITEMS}`;
+    progress.textContent = `${items.length} / 100`;
   }
 
   function updatePagination() {
@@ -262,8 +263,8 @@
       alert('PLEASE ENTER SOMETHING YOU ENJOY.');
       return;
     }
-    if (items.length >= MAX_ITEMS) {
-      alert(`MAXIMUM OF ${MAX_ITEMS} ITEMS REACHED.`);
+    if (items.length >= 100) {
+      alert(`MAXIMUM OF 100 ITEMS REACHED.`);
       return;
     }
     items.push(text);
@@ -331,8 +332,8 @@
       try {
         const importedItems = JSON.parse(e.target.result);
         if (Array.isArray(importedItems)) {
-          if (importedItems.length > MAX_ITEMS) {
-            alert(`IMPORT FAILED: LIST EXCEEDS MAXIMUM OF ${MAX_ITEMS} ITEMS.`);
+          if (importedItems.length > 100) {
+            alert(`IMPORT FAILED: LIST EXCEEDS MAXIMUM OF 100 ITEMS.`);
             return;
           }
           if (!importedItems.every(i => typeof i === 'string')) {
