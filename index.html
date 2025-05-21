@@ -18,8 +18,8 @@
   p.tagline {
     text-align: center;
     font-style: normal;
-    font-size: 1.6rem; /* bigger */
-    color: #0078d4; /* blue */
+    font-size: 1.6rem;
+    color: #0078d4;
     margin-top: 0;
     margin-bottom: 2rem;
     letter-spacing: 0.05em;
@@ -51,7 +51,6 @@
     background: none;
     border: none;
     padding: 0;
-    font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     cursor: pointer;
@@ -62,8 +61,9 @@
   }
   #addBtn {
     color: #0078d4;
-    font-size: 1.2rem; /* bigger like before */
+    font-size: 1.2rem;
     margin-left: 0.5rem;
+    font-weight: normal; /* Remove bold */
   }
   ul {
     margin-top: 1.5rem;
@@ -94,7 +94,7 @@
     font-weight: 700;
     color: #0078d4;
     text-align: center;
-    font-size: 0.9rem; /* increased size */
+    font-size: 0.9rem;
     letter-spacing: 0.1em;
   }
   #buttons-container {
@@ -103,14 +103,12 @@
   }
   #printBtn {
     color: #0078d4;
-    font-weight: 700;
-    font-size: 1.2rem; /* big like add */
+    font-size: 1.2rem;
     margin-bottom: 0.5rem;
   }
   #exportBtn, #importBtn {
     color: #0078d4;
-    font-weight: 700;
-    font-size: 0.9rem; /* smaller than print */
+    font-size: 0.9rem;
     margin: 0 1rem;
   }
   #pagination {
@@ -123,7 +121,6 @@
     font-size: 1.5rem;
     cursor: pointer;
     color: #0078d4;
-    font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     padding: 0 0.7rem;
@@ -158,6 +155,7 @@
       margin-left: 0;
       width: 100%;
       font-size: 1.2rem;
+      margin-top: 0.5rem;
     }
     #buttons-container {
       display: flex;
@@ -206,7 +204,7 @@
 
   <div id="pagination">
     <button id="prevPage" disabled aria-label="Previous page">←</button>
-    <span id="pageInfo">1 / 1</span>
+    <span id="pageInfo">1/1</span>
     <button id="nextPage" aria-label="Next page">→</button>
   </div>
 
@@ -246,9 +244,18 @@
 
   function updatePagination() {
     const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
-    pageInfo.textContent = `${currentPage} / ${totalPages}`;
+    pageInfo.textContent = `${currentPage}/${totalPages}`;
     prevPageBtn.disabled = currentPage <= 1;
     nextPageBtn.disabled = currentPage >= totalPages;
+
+    // Show arrows conditionally
+    if (totalPages === 1) {
+      prevPageBtn.style.display = 'none';
+      nextPageBtn.style.display = 'none';
+    } else {
+      prevPageBtn.style.display = currentPage <= 1 ? 'none' : 'inline';
+      nextPageBtn.style.display = currentPage >= totalPages ? 'none' : 'inline';
+    }
   }
 
   function renderList() {
