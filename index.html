@@ -3,220 +3,427 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Clear Cache - Listing App</title>
+<title>Clear Cache</title>
 <style>
-  :root {
-    --primary-color: #007bff; /* Change this to try other colors */
-  }
-
   body {
-    font-family: Arial, sans-serif;
-    margin: 20px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 1rem 2rem;
     background: #f9f9f9;
-    color: #333;
-  }
-
-  h1 {
-    color: var(--primary-color);
-    text-align: center;
-  }
-
-  input[type="text"] {
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: none; /* Removed border */
-    outline: none; /* Removed focus outline */
-    box-sizing: border-box;
-    margin-bottom: 10px;
-    border-radius: 4px;
-    /* Optional subtle shadow for input */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  }
-
-  button, .button-group button {
-    background-color: var(--primary-color);
-    color: white;
-    border-radius: 4px;
-    border: none;
-    padding: 8px 16px;
-    cursor: pointer;
-    font-weight: 600;
-    margin: 5px;
-    transition: background-color 0.3s ease;
-  }
-
-  button:hover, .button-group button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-  }
-
-  .button-group {
-    text-align: center;
-    margin-top: 15px;
-  }
-
-  /* Clear List button style */
-  #clearListBtn {
-    background-color: #e74c3c; /* red */
-    margin-top: 10px;
-    font-weight: bold;
-  }
-
-  #clearListBtn:hover {
-    background-color: #c0392b;
-  }
-
-  ul {
-    list-style: none;
-    padding: 0;
-  }
-
-  li {
-    background: white;
-    margin-bottom: 5px;
-    padding: 10px;
-    border-radius: 4px;
-    cursor: pointer;
+    color: #222;
+    line-height: 1.5;
     text-transform: uppercase;
   }
-
-  li:hover {
-    background-color: #e6f0ff;
+  p.tagline {
+    text-align: center;
+    font-style: normal;
+    font-size: 1.7rem; /* slightly bigger */
+    color: #0078d4;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
   }
-
+  #input-section {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  input[type="text"] {
+    width: 80%;
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    color: #222;
+    background: white;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    outline-offset: 2px;
+    outline-color: transparent;
+    transition: outline-color 0.2s ease;
+  }
+  input[type="text"]:focus {
+    outline-color: #0078d4;
+  }
+  button, .link-button {
+    background: none;
+    border: none;
+    padding: 0;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: color 0.3s ease;
+  }
+  button:hover, .link-button:hover {
+    color: #004a8f;
+  }
+  #addBtn {
+    color: #0078d4;
+    font-size: 1.2rem;
+    margin-left: 0.5rem;
+    font-weight: normal;
+  }
+  ul {
+    margin-top: 1.5rem;
+    padding-left: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem 2rem;
+    border-top: 1px solid #ccc;
+    padding-top: 1rem;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  li {
+    padding-left: 0.8rem;
+    border-left: 4px solid #0078d4;
+    color: #111;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    word-break: break-word;
+    cursor: pointer;
+  }
+  li:hover {
+    background-color: #e6f0fa;
+  }
+  .progress {
+    margin-top: 1.8rem;
+    font-weight: 700;
+    color: #0078d4;
+    text-align: center;
+    font-size: 0.9rem;
+    letter-spacing: 0.1em;
+  }
+  #buttons-container {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  #printBtn {
+    color: #0078d4;
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+  #exportBtn, #importBtn {
+    color: #0078d4;
+    font-size: 0.9rem;
+    margin: 0 1rem;
+  }
+  #pagination {
+    margin-top: 1rem;
+    text-align: center;
+  }
+  #pagination button {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #0078d4;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0 0.7rem;
+    transition: color 0.3s ease;
+  }
+  #pagination button:disabled {
+    opacity: 0.4;
+    cursor: default;
+  }
+  #pagination button:hover:not(:disabled) {
+    color: #004a8f;
+  }
+  #pageInfo {
+    font-weight: 700;
+    color: #0078d4;
+    letter-spacing: 0.1em;
+    margin: 0 1rem;
+    font-size: 0.9rem;
+  }
   /* Responsive */
-  @media (max-width: 600px) {
-    input[type="text"], button {
-      font-size: 14px;
+  @media (max-width: 700px) {
+    ul {
+      grid-template-columns: 1fr;
+      max-height: none;
+      overflow-y: visible;
+    }
+    input[type="text"] {
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+    #addBtn {
+      margin-left: 0;
+      width: 100%;
+      font-size: 1.2rem;
+      margin-top: 0.5rem;
+    }
+    #buttons-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #exportBtn, #importBtn {
+      margin: 0.3rem 0;
+    }
+  }
+  /* Print styles */
+  @media print {
+    body {
+      max-width: 100%;
+      margin: 0.5in;
+      background: white;
+      color: black;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      text-transform: uppercase;
+    }
+    ul {
+      max-height: none;
+      overflow: visible;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem 2rem;
+      border-top: none;
+      padding-top: 0;
+    }
+    ul li {
+      border-left: none !important;
+    }
+    #buttons-container, #pagination, #input-section, .tagline, .progress {
+      display: none;
     }
   }
 </style>
 </head>
 <body>
+  <p class="tagline">A tool for clarity</p>
 
-<h1>Clear Cache</h1>
-<p style="text-align:center; max-width: 400px; margin: 0 auto 20px;">
-  A tool for clarity: list things you enjoy and reflect on what you value.
-</p>
+  <div id="input-section" style="text-align:center;">
+    <input type="text" id="itemInput" placeholder="I ENJOY..." aria-label="Item input" />
+    <button id="addBtn">ADD</button>
+  </div>
 
-<input type="text" id="itemInput" placeholder="I ENJOY..." aria-label="Add item" />
+  <ul id="joyList" aria-live="polite" aria-label="List of items"></ul>
 
-<button id="addBtn">Add</button>
+  <div class="progress" id="progress">0/100</div>
 
-<ul id="itemList" aria-live="polite" aria-label="List of things you enjoy"></ul>
+  <div id="pagination">
+    <button id="prevPage" disabled aria-label="Previous page">←</button>
+    <span id="pageInfo">1/1</span>
+    <button id="nextPage" aria-label="Next page">→</button>
+  </div>
 
-<div class="button-group">
-  <button id="exportBtn">Export</button>
-  <button id="importBtn">Import</button>
-</div>
-
-<div style="text-align:center;">
-  <button id="clearListBtn">Clear List</button>
-</div>
+  <div id="buttons-container">
+    <button id="printBtn" class="link-button">PRINT YOUR LIST</button><br />
+    <button id="exportBtn" class="link-button">EXPORT</button>
+    <button id="importBtn" class="link-button">IMPORT</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" />
+  </div>
 
 <script>
-  let list = JSON.parse(localStorage.getItem('clearCacheList')) || [];
-
-  const itemInput = document.getElementById('itemInput');
+  const input = document.getElementById('itemInput');
   const addBtn = document.getElementById('addBtn');
-  const itemList = document.getElementById('itemList');
+  const joyList = document.getElementById('joyList');
+  const progress = document.getElementById('progress');
+  const printBtn = document.getElementById('printBtn');
   const exportBtn = document.getElementById('exportBtn');
   const importBtn = document.getElementById('importBtn');
-  const clearListBtn = document.getElementById('clearListBtn');
+  const importFile = document.getElementById('importFile');
+  const prevPageBtn = document.getElementById('prevPage');
+  const nextPageBtn = document.getElementById('nextPage');
+  const pageInfo = document.getElementById('pageInfo');
 
-  function saveList() {
-    localStorage.setItem('clearCacheList', JSON.stringify(list));
+  const ITEMS_PER_PAGE = 100;
+  const MAX_ITEMS = 100;
+
+  let items = JSON.parse(localStorage.getItem('joyItems')) || [];
+  let currentPage = 1;
+
+  // Multi-level undo stack
+  let undoStack = [];
+
+  function saveItems() {
+    localStorage.setItem('joyItems', JSON.stringify(items));
+  }
+
+  function updateProgress() {
+    progress.textContent = `${items.length}/${MAX_ITEMS}`;
+  }
+
+  function updatePagination() {
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+    if (totalPages <= 1) {
+      pageInfo.style.display = 'none';
+    } else {
+      pageInfo.style.display = 'inline';
+      pageInfo.textContent = `${currentPage}/${totalPages}`;
+    }
+    prevPageBtn.disabled = currentPage <= 1;
+    nextPageBtn.disabled = currentPage >= totalPages;
+
+    if (totalPages === 1) {
+      prevPageBtn.style.display = 'none';
+      nextPageBtn.style.display = 'none';
+    } else {
+      prevPageBtn.style.display = currentPage <= 1 ? 'none' : 'inline';
+      nextPageBtn.style.display = currentPage >= totalPages ? 'none' : 'inline';
+    }
   }
 
   function renderList() {
-    itemList.innerHTML = '';
-    list.forEach((item, index) => {
+    joyList.innerHTML = '';
+    const totalItems = items.length;
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const end = Math.min(start + ITEMS_PER_PAGE, totalItems);
+    for (let i = start; i < end; i++) {
       const li = document.createElement('li');
-      li.textContent = item.toUpperCase();
-      li.tabIndex = 0;
-      li.addEventListener('click', () => editItem(index));
-      li.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter') editItem(index);
-      });
-      itemList.appendChild(li);
-    });
+      li.textContent = items[i].toUpperCase();
+      li.title = "Click to edit or remove";
+      ((index) => {
+        li.addEventListener('click', () => {
+          const action = prompt('Modify item (leave empty to delete):');
+          if (action === null) return; // Cancelled
+          const trimmed = action.trim();
+          if (trimmed === '') {
+            // Save deleted item for undo stack
+            undoStack.push({ item: items[index], index });
+            items.splice(index, 1);
+            saveItems();
+            const newTotalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+            if (currentPage > newTotalPages) currentPage = newTotalPages;
+            renderList();
+          } else {
+            items[index] = trimmed.toUpperCase();
+            saveItems();
+            renderList();
+          }
+        });
+      })(i);
+      joyList.appendChild(li);
+    }
+    updateProgress();
+    updatePagination();
   }
 
   function addItem() {
-    const value = itemInput.value.trim();
-    if (value && list.length < 100) {
-      list.push(value);
-      saveList();
-      renderList();
-      itemInput.value = '';
-      itemInput.focus();
+    const text = input.value.trim().toUpperCase();
+    if (!text) {
+      alert('PLEASE ENTER SOMETHING YOU ENJOY.');
+      return;
     }
-  }
-
-  function editItem(index) {
-    const newValue = prompt('Edit item (leave blank to delete):', list[index]);
-    if (newValue === null) return; // Cancelled
-    if (newValue.trim() === '') {
-      list.splice(index, 1);
-    } else {
-      list[index] = newValue.trim();
+    if (items.length >= MAX_ITEMS) {
+      alert(`MAXIMUM OF ${MAX_ITEMS} ITEMS REACHED.`);
+      return;
     }
-    saveList();
+    items.push(text);
+    saveItems();
+    input.value = '';
+    currentPage = Math.ceil(items.length / ITEMS_PER_PAGE);
     renderList();
+    input.focus();
   }
 
   addBtn.addEventListener('click', addItem);
-
-  itemInput.addEventListener('keydown', (e) => {
+  input.addEventListener('keydown', e => {
     if (e.key === 'Enter') addItem();
   });
 
+  prevPageBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderList();
+    }
+  });
+
+  nextPageBtn.addEventListener('click', () => {
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderList();
+    }
+  });
+
+  printBtn.addEventListener('click', () => {
+    if (items.length === 0) {
+      alert('YOUR LIST IS EMPTY!');
+      return;
+    }
+    window.print();
+  });
+
   exportBtn.addEventListener('click', () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(list));
-    const dlAnchorElem = document.createElement('a');
-    dlAnchorElem.setAttribute("href", dataStr);
-    dlAnchorElem.setAttribute("download", "joylist.json");
-    dlAnchorElem.click();
+    if (items.length === 0) {
+      alert('YOUR LIST IS EMPTY!');
+      return;
+    }
+    const dataStr = JSON.stringify(items);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'joylist.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   });
 
   importBtn.addEventListener('click', () => {
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'application/json';
-    input.onchange = e => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = event => {
-        try {
-          const importedList = JSON.parse(event.target.result);
-          if (Array.isArray(importedList) && importedList.every(i => typeof i === 'string')) {
-            list = importedList.slice(0, 100);
-            saveList();
-            renderList();
-          } else {
-            alert('Invalid file format');
-          }
-        } catch {
-          alert('Error reading file');
-        }
-      };
-      reader.readAsText(file);
-    };
-    input.click();
+    importFile.click();
   });
 
-  clearListBtn.addEventListener('click', () => {
-    if (confirm('Are you sure you want to clear the entire list?')) {
-      list = [];
-      saveList();
-      renderList();
+  importFile.addEventListener('change', () => {
+    const file = importFile.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const importedItems = JSON.parse(e.target.result);
+        if (Array.isArray(importedItems)) {
+          if (importedItems.length > MAX_ITEMS) {
+            alert(`IMPORT FAILED: LIST EXCEEDS MAXIMUM OF ${MAX_ITEMS} ITEMS.`);
+            return;
+          }
+          if (!importedItems.every(i => typeof i === 'string')) {
+            alert('IMPORT FAILED: INVALID FILE FORMAT.');
+            return;
+          }
+          items = importedItems.map(i => i.toUpperCase());
+          saveItems();
+          currentPage = 1;
+          renderList();
+        } else {
+          alert('IMPORT FAILED: INVALID FILE FORMAT.');
+        }
+      } catch {
+        alert('IMPORT FAILED: INVALID JSON.');
+      }
+    };
+    reader.readAsText(file);
+    importFile.value = ''; // reset file input
+  });
+
+  // Undo function
+  function undoDelete() {
+    if (undoStack.length === 0) return;
+    const { item, index } = undoStack.pop();
+    items.splice(index, 0, item);
+    saveItems();
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    renderList();
+  }
+
+  // Listen for Ctrl+Z / Cmd+Z for undo
+  window.addEventListener('keydown', (e) => {
+    const isUndo = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z';
+    if (isUndo) {
+      e.preventDefault();
+      undoDelete();
     }
   });
 
   // Initial render
   renderList();
 </script>
-
 </body>
 </html>
