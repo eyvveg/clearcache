@@ -18,8 +18,8 @@
   p.tagline {
     text-align: center;
     font-style: normal;
-    font-size: 1.3rem;
-    color: #555;
+    font-size: 1.6rem; /* bigger */
+    color: #0078d4; /* blue */
     margin-top: 0;
     margin-bottom: 2rem;
     letter-spacing: 0.05em;
@@ -51,28 +51,19 @@
     background: none;
     border: none;
     padding: 0;
-    font-size: 1rem;
-    cursor: pointer;
-    color: #0078d4;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
+    cursor: pointer;
     transition: color 0.3s ease;
   }
   button:hover, .link-button:hover {
     color: #004a8f;
   }
   #addBtn {
+    color: #0078d4;
+    font-size: 1.2rem; /* bigger like before */
     margin-left: 0.5rem;
-    border: 2px solid #0078d4;
-    padding: 0.6rem 1.2rem;
-    border-radius: 4px;
-    background-color: transparent;
-    transition: background-color 0.3s ease, color 0.3s ease;
-  }
-  #addBtn:hover {
-    background-color: #0078d4;
-    color: white;
   }
   ul {
     margin-top: 1.5rem;
@@ -88,26 +79,39 @@
   }
   li {
     padding-left: 0.8rem;
+    border-left: 4px solid #0078d4; /* blue bar */
     color: #111;
     font-weight: 600;
     letter-spacing: 0.05em;
     word-break: break-word;
+    cursor: pointer;
+  }
+  li:hover {
+    background-color: #e6f0fa;
   }
   .progress {
     margin-top: 1.8rem;
     font-weight: 700;
     color: #0078d4;
     text-align: center;
-    font-size: 0.6rem; /* smaller font size */
+    font-size: 0.9rem; /* increased size */
     letter-spacing: 0.1em;
   }
   #buttons-container {
     text-align: center;
     margin-top: 1.5rem;
   }
-  #buttons-container button {
+  #printBtn {
+    color: #0078d4;
+    font-weight: 700;
+    font-size: 1.2rem; /* big like add */
+    margin-bottom: 0.5rem;
+  }
+  #exportBtn, #importBtn {
+    color: #0078d4;
+    font-weight: 700;
+    font-size: 0.9rem; /* smaller than print */
     margin: 0 1rem;
-    font-size: 0.6rem; /* smaller font size for export/import */
   }
   #pagination {
     margin-top: 1rem;
@@ -137,7 +141,7 @@
     color: #0078d4;
     letter-spacing: 0.1em;
     margin: 0 1rem;
-    font-size: 0.6rem; /* smaller font size */
+    font-size: 0.9rem;
   }
   /* Responsive */
   @media (max-width: 700px) {
@@ -153,11 +157,15 @@
     #addBtn {
       margin-left: 0;
       width: 100%;
+      font-size: 1.2rem;
     }
-    #buttons-container button {
-      margin: 0.5rem 0;
-      display: block;
-      width: 100%;
+    #buttons-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    #exportBtn, #importBtn {
+      margin: 0.3rem 0;
     }
   }
   /* Print styles */
@@ -178,7 +186,7 @@
       border-top: none;
       padding-top: 0;
     }
-    #buttons-container, #pagination, #input-section {
+    #buttons-container, #pagination, #input-section, .tagline, .progress {
       display: none;
     }
   }
@@ -203,14 +211,13 @@
   </div>
 
   <div id="buttons-container">
-    <button id="printBtn" class="link-button">PRINT YOUR LIST</button>
+    <button id="printBtn" class="link-button">PRINT YOUR LIST</button><br />
     <button id="exportBtn" class="link-button">EXPORT</button>
     <button id="importBtn" class="link-button">IMPORT</button>
     <input type="file" id="importFile" accept=".json" style="display:none" />
   </div>
 
 <script>
-  // JavaScript remains unchanged, only style changes for font size on export/import and counters
   const input = document.getElementById('itemInput');
   const addBtn = document.getElementById('addBtn');
   const joyList = document.getElementById('joyList');
@@ -224,7 +231,7 @@
   const pageInfo = document.getElementById('pageInfo');
 
   const ITEMS_PER_PAGE = 100;
-  const MAX_ITEMS = 1000;
+  const MAX_ITEMS = 100;
 
   let items = JSON.parse(localStorage.getItem('joyItems')) || [];
   let currentPage = 1;
@@ -234,7 +241,7 @@
   }
 
   function updateProgress() {
-    progress.textContent = `${items.length} / 100`;
+    progress.textContent = `${items.length} / ${MAX_ITEMS}`;
   }
 
   function updatePagination() {
@@ -251,6 +258,26 @@
     for (let i = start; i < end; i++) {
       const li = document.createElement('li');
       li.textContent = items[i].toUpperCase();
+      li.title = "Click to edit or remove";
+      li.addEventListener('click', () => {
+        const action = prompt(`Edit item or type DELETE to remove:\n\n${items[i]}`, items[i]);
+        if (action === null) return; // Cancelled
+        const trimmed = action.trim();
+        if (trimmed.toUpperCase() === 'DELETE') {
+          if (confirm('Are you sure you want to delete this item?')) {
+            items.splice(i, 1);
+            saveItems();
+            // Adjust current page if needed
+            const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+            if (currentPage > totalPages) currentPage = totalPages;
+            renderList();
+          }
+        } else if (trimmed.length > 0) {
+          items[i] = trimmed.toUpperCase();
+          saveItems();
+          renderList();
+        }
+      });
       joyList.appendChild(li);
     }
     updateProgress();
@@ -263,8 +290,8 @@
       alert('PLEASE ENTER SOMETHING YOU ENJOY.');
       return;
     }
-    if (items.length >= 100) {
-      alert(`MAXIMUM OF 100 ITEMS REACHED.`);
+    if (items.length >= MAX_ITEMS) {
+      alert(`MAXIMUM OF ${MAX_ITEMS} ITEMS REACHED.`);
       return;
     }
     items.push(text);
@@ -296,67 +323,4 @@
   });
 
   printBtn.addEventListener('click', () => {
-    if (items.length === 0) {
-      alert('YOUR LIST IS EMPTY!');
-      return;
-    }
-    window.print();
-  });
-
-  exportBtn.addEventListener('click', () => {
-    if (items.length === 0) {
-      alert('YOUR LIST IS EMPTY!');
-      return;
-    }
-    const dataStr = JSON.stringify(items);
-    const blob = new Blob([dataStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'joylist.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  });
-
-  importBtn.addEventListener('click', () => {
-    importFile.click();
-  });
-
-  importFile.addEventListener('change', () => {
-    const file = importFile.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = e => {
-      try {
-        const importedItems = JSON.parse(e.target.result);
-        if (Array.isArray(importedItems)) {
-          if (importedItems.length > 100) {
-            alert(`IMPORT FAILED: LIST EXCEEDS MAXIMUM OF 100 ITEMS.`);
-            return;
-          }
-          if (!importedItems.every(i => typeof i === 'string')) {
-            alert('IMPORT FAILED: INVALID FILE FORMAT.');
-            return;
-          }
-          items = importedItems.map(i => i.toUpperCase());
-          saveItems();
-          currentPage = 1;
-          renderList();
-        } else {
-          alert('IMPORT FAILED: INVALID FILE FORMAT.');
-        }
-      } catch {
-        alert('IMPORT FAILED: INVALID JSON.');
-      }
-    };
-    reader.readAsText(file);
-    importFile.value = ''; // reset file input
-  });
-
-  // Initial render
-  renderList();
-</script>
-</body>
-</html>
+    if (items.length ===
