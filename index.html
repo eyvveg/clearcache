@@ -1,207 +1,414 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Clear Cache</title>
-  <style>
-    body {
-      font-family: "Courier New", Courier, monospace;
-      max-width: 900px;
-      margin: 3rem auto;
-      padding: 1rem 2rem;
-      background: #f5f7fa;
-      color: #1b263b;
-      line-height: 1.6;
-      text-transform: uppercase;
-    }
-    h1 {
-      font-size: 3.5rem;
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 0.3rem;
-      color: #0d1b2a;
-      letter-spacing: 0.1em;
-    }
-    p.tagline {
-      text-align: center;
-      font-style: normal;
-      font-size: 1.3rem;
-      color: #415a77;
-      margin-top: 0;
-      margin-bottom: 2rem;
-      letter-spacing: 0.05em;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Clear Cache</title>
+<style>
+  body {
+    font-family: "Courier New", Courier, monospace;
+    max-width: 900px;
+    margin: 3rem auto;
+    padding: 1rem 2rem;
+    background: #f5f7fa;
+    color: #1b263b;
+    line-height: 1.6;
+    text-transform: uppercase;
+  }
+  h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 0.3rem;
+    color: #0d1b2a;
+    letter-spacing: 0.1em;
+  }
+  p.tagline {
+    text-align: center;
+    font-style: normal;
+    font-size: 1.3rem;
+    color: #415a77;
+    margin-top: 0;
+    margin-bottom: 2rem;
+    letter-spacing: 0.05em;
+  }
+  input[type="text"] {
+    width: 80%;
+    padding: 0.6rem;
+    font-size: 1rem;
+    border: 1px solid #415a77;
+    border-radius: 4px;
+    box-sizing: border-box;
+    text-transform: uppercase;
+    color: #1b263b;
+    background: #e0e6f0;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+  }
+  button, .list-btn {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    cursor: pointer;
+    background-color: #1b263b;
+    color: #f0f4f8;
+    border: none;
+    border-radius: 4px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    transition: background-color 0.3s ease;
+    text-transform: uppercase;
+  }
+  button:hover, .list-btn:hover {
+    background-color: #415a77;
+  }
+  #addBtn {
+    margin-left: 0.5rem;
+  }
+  ul {
+    margin-top: 1.5rem;
+    padding-left: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem 2rem;
+    border-top: 1px solid #415a77;
+    padding-top: 1rem;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+  li {
+    padding-left: 0.8rem;
+    border-left: 4px solid #1b263b;
+    color: #0d1b2a;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    word-break: break-word;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .item-text {
+    flex-grow: 1;
+    padding-right: 1rem;
+  }
+  .list-btn {
+    margin-left: 0.3rem;
+    padding: 0.3rem 0.6rem;
+    font-size: 0.8rem;
+    border-radius: 3px;
+  }
+  .progress {
+    margin-top: 1.8rem;
+    font-weight: 700;
+    color: #1b263b;
+    text-align: center;
+    font-size: 1.2rem;
+    letter-spacing: 0.1em;
+  }
+  #printBtn, #exportBtn, #importBtn {
+    display: inline-block;
+    margin: 1.5rem 0.5rem 0 0;
+    background-color: #0d1b2a;
+    padding: 0.7rem 1.5rem;
+    font-weight: 700;
+    border-radius: 4px;
+    border: none;
+    color: #f0f4f8;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  #printBtn:hover, #exportBtn:hover, #importBtn:hover {
+    background-color: #415a77;
+  }
+  #pagination {
+    margin-top: 1rem;
+    text-align: center;
+  }
+  #pagination button {
+    margin: 0 0.5rem;
+  }
+  /* Scrollbar for the list */
+  ul::-webkit-scrollbar {
+    width: 8px;
+  }
+  ul::-webkit-scrollbar-thumb {
+    background-color: #415a77;
+    border-radius: 4px;
+  }
+  ul::-webkit-scrollbar-track {
+    background: #e0e6f0;
+  }
+  /* Responsive */
+  @media (max-width: 700px) {
+    ul {
+      grid-template-columns: 1fr;
+      max-height: none;
+      overflow-y: visible;
     }
     input[type="text"] {
-      width: 80%;
-      padding: 0.6rem;
-      font-size: 1rem;
-      border: 1px solid #415a77;
-      border-radius: 4px;
-      box-sizing: border-box;
-      text-transform: uppercase;
-      color: #1b263b;
-      background: #e0e6f0;
-      font-weight: 600;
-      letter-spacing: 0.05em;
+      width: 100%;
+      margin-bottom: 0.5rem;
     }
-    button {
-      padding: 0.6rem 1.2rem;
-      font-size: 1rem;
-      margin-left: 0.5rem;
-      cursor: pointer;
-      background-color: #1b263b;
-      color: #f0f4f8;
-      border: none;
-      border-radius: 4px;
-      font-weight: 700;
-      letter-spacing: 0.1em;
-      transition: background-color 0.3s ease;
-      text-transform: uppercase;
+    #addBtn {
+      margin-left: 0;
+      width: 100%;
     }
-    button:hover {
-      background-color: #415a77;
+    #buttons-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+    #printBtn, #exportBtn, #importBtn {
+      width: 100%;
+      margin: 0.5rem 0 0 0;
+    }
+  }
+  /* Print styles */
+  @media print {
+    body {
+      max-width: 100%;
+      margin: 0.5in;
+      background: white;
+      color: black;
+      font-family: "Courier New", Courier, monospace;
+      text-transform: uppercase;
     }
     ul {
-      margin-top: 1.5rem;
-      padding-left: 0;
-      list-style: none;
-      display: grid;
+      max-height: none;
+      overflow: visible;
       grid-template-columns: repeat(3, 1fr);
       gap: 1rem 2rem;
-      border-top: 1px solid #415a77;
-      padding-top: 1rem;
-      max-height: 70vh;
-      overflow-y: auto;
+      border-top: none;
+      padding-top: 0;
     }
-    li {
-      padding-left: 0.8rem;
-      border-left: 4px solid #1b263b;
-      color: #0d1b2a;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      word-break: break-word;
+    #printBtn, #exportBtn, #importBtn, #pagination, #input-section {
+      display: none;
     }
-    .progress {
-      margin-top: 1.8rem;
-      font-weight: 700;
-      color: #1b263b;
-      text-align: center;
-      font-size: 1.2rem;
-      letter-spacing: 0.1em;
-    }
-    #printBtn {
-      display: block;
-      margin: 2.5rem auto 0;
-      background-color: #0d1b2a;
-      padding: 0.7rem 1.5rem;
-      font-weight: 700;
-      border-radius: 4px;
-      border: none;
-      color: #f0f4f8;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-    }
-    #printBtn:hover {
-      background-color: #415a77;
-    }
-    /* Scrollbar for the list */
-    ul::-webkit-scrollbar {
-      width: 8px;
-    }
-    ul::-webkit-scrollbar-thumb {
-      background-color: #415a77;
-      border-radius: 4px;
-    }
-    ul::-webkit-scrollbar-track {
-      background: #e0e6f0;
-    }
-    /* Print styles */
-    @media print {
-      body {
-        max-width: 100%;
-        margin: 0.5in;
-        background: white;
-        color: black;
-        font-family: "Courier New", Courier, monospace;
-        text-transform: uppercase;
-      }
-      ul {
-        max-height: none;
-        overflow: visible;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1rem 2rem;
-        border-top: none;
-        padding-top: 0;
-      }
-      #printBtn, input, button {
-        display: none;
-      }
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <h1>I ENJOY</h1>
-  <p class="tagline">CLEAR THE NOISE. FOCUS ON WHAT MATTERS.</p>
+  <p class="tagline">LIST THINGS YOU LIKE. KEEP IT FOR YOURSELF. SEE WHAT HAPPENS.</p>
 
-  <input type="text" id="itemInput" placeholder="ENTER SOMETHING YOU ENJOY..." />
-  <button id="addBtn">ADD</button>
+  <div id="input-section" style="text-align:center;">
+    <input type="text" id="itemInput" placeholder="ENTER SOMETHING YOU ENJOY..." aria-label="Item input" />
+    <button id="addBtn">ADD</button>
+  </div>
 
-  <ul id="joyList"></ul>
-  <div class="progress" id="progress">0 / 100</div>
+  <ul id="joyList" aria-live="polite" aria-label="List of items"></ul>
 
-  <button id="printBtn">PRINT YOUR LIST</button>
+  <div class="progress" id="progress">0 / 1000</div>
 
-  <script>
-    const input = document.getElementById('itemInput');
-    const addBtn = document.getElementById('addBtn');
-    const joyList = document.getElementById('joyList');
-    const progress = document.getElementById('progress');
-    const printBtn = document.getElementById('printBtn');
+  <div id="pagination">
+    <button id="prevPage" disabled>PREVIOUS</button>
+    <span id="pageInfo">Page 1 of 10</span>
+    <button id="nextPage">NEXT</button>
+  </div>
 
-    let items = JSON.parse(localStorage.getItem('joyItems')) || [];
+  <div id="buttons-container" style="text-align:center;">
+    <button id="printBtn">PRINT YOUR LIST</button>
+    <button id="exportBtn">EXPORT LIST</button>
+    <button id="importBtn">IMPORT LIST</button>
+    <input type="file" id="importFile" accept=".json" style="display:none" />
+  </div>
 
-    function updateProgress() {
-      progress.textContent = `${items.length} / 100`;
+<script>
+  const input = document.getElementById('itemInput');
+  const addBtn = document.getElementById('addBtn');
+  const joyList = document.getElementById('joyList');
+  const progress = document.getElementById('progress');
+  const printBtn = document.getElementById('printBtn');
+  const exportBtn = document.getElementById('exportBtn');
+  const importBtn = document.getElementById('importBtn');
+  const importFile = document.getElementById('importFile');
+  const prevPageBtn = document.getElementById('prevPage');
+  const nextPageBtn = document.getElementById('nextPage');
+  const pageInfo = document.getElementById('pageInfo');
+
+  const ITEMS_PER_PAGE = 100;
+  const MAX_ITEMS = 1000;
+
+  let items = JSON.parse(localStorage.getItem('joyItems')) || [];
+  let currentPage = 1;
+
+  function saveItems() {
+    localStorage.setItem('joyItems', JSON.stringify(items));
+  }
+
+  function updateProgress() {
+    progress.textContent = `${items.length} / ${MAX_ITEMS}`;
+  }
+
+  function updatePagination() {
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    prevPageBtn.disabled = currentPage <= 1;
+    nextPageBtn.disabled = currentPage >= totalPages;
+  }
+
+  function renderList() {
+    joyList.innerHTML = '';
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const end = Math.min(start + ITEMS_PER_PAGE, items.length);
+    for (let i = start; i < end; i++) {
+      const li = document.createElement('li');
+
+      const span = document.createElement('span');
+      span.className = 'item-text';
+      span.textContent = items[i].toUpperCase();
+      span.setAttribute('tabindex', '0');
+      li.appendChild(span);
+
+      // Edit button
+      const editBtn = document.createElement('button');
+      editBtn.textContent = 'EDIT';
+      editBtn.className = 'list-btn';
+      editBtn.setAttribute('aria-label', `Edit item ${items[i]}`);
+      editBtn.addEventListener('click', () => editItem(i));
+      li.appendChild(editBtn);
+
+      // Delete button
+      const delBtn = document.createElement('button');
+      delBtn.textContent = 'DELETE';
+      delBtn.className = 'list-btn';
+      delBtn.setAttribute('aria-label', `Delete item ${items[i]}`);
+      delBtn.addEventListener('click', () => deleteItem(i));
+      li.appendChild(delBtn);
+
+      joyList.appendChild(li);
     }
+    updateProgress();
+    updatePagination();
+  }
 
-    function renderList() {
-      joyList.innerHTML = '';
-      items.forEach(item => {
-        const li = document.createElement('li');
-        li.textContent = item.toUpperCase();
-        joyList.appendChild(li);
-      });
-      updateProgress();
+  function addItem() {
+    const text = input.value.trim().toUpperCase();
+    if (!text) {
+      alert('PLEASE ENTER SOMETHING YOU ENJOY.');
+      return;
     }
-
-    function addItem() {
-      const text = input.value.trim();
-      if (text && items.length < 100) {
-        items.push(text.toUpperCase());
-        localStorage.setItem('joyItems', JSON.stringify(items));
-        renderList();
-        input.value = '';
-      }
-      input.focus();
+    if (items.length >= MAX_ITEMS) {
+      alert(`MAXIMUM OF ${MAX_ITEMS} ITEMS REACHED.`);
+      return;
     }
-
-    addBtn.addEventListener('click', addItem);
-    input.addEventListener('keydown', e => {
-      if (e.key === 'Enter') addItem();
-    });
-
-    printBtn.addEventListener('click', () => {
-      if (items.length === 0) {
-        alert('YOUR LIST IS EMPTY!');
-        return;
-      }
-      window.print();
-    });
-
+    items.push(text);
+    saveItems();
+    input.value = '';
+    currentPage = Math.ceil(items.length / ITEMS_PER_PAGE);
     renderList();
-  </script>
+    input.focus();
+  }
+
+  function editItem(index) {
+    const newText = prompt('EDIT ITEM:', items[index]);
+    if (newText !== null) {
+      const trimmed = newText.trim().toUpperCase();
+      if (trimmed) {
+        items[index] = trimmed;
+        saveItems();
+        renderList();
+      }
+    }
+  }
+
+  function deleteItem(index) {
+    if (confirm('DELETE THIS ITEM?')) {
+      items.splice(index, 1);
+      saveItems();
+      // Adjust current page if needed
+      const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+      if (currentPage > totalPages) currentPage = totalPages;
+      renderList();
+    }
+  }
+
+  addBtn.addEventListener('click', addItem);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') addItem();
+  });
+
+  prevPageBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderList();
+    }
+  });
+
+  nextPageBtn.addEventListener('click', () => {
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderList();
+    }
+  });
+
+  printBtn.addEventListener('click', () => {
+    if (items.length === 0) {
+      alert('YOUR LIST IS EMPTY!');
+      return;
+    }
+    window.print();
+  });
+
+  exportBtn.addEventListener('click', () => {
+    if (items.length === 0) {
+      alert('YOUR LIST IS EMPTY!');
+      return;
+    }
+    const dataStr = JSON.stringify(items);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'joylist.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  importBtn.addEventListener('click', () => {
+    importFile.click();
+  });
+
+  importFile.addEventListener('change', () => {
+    const file = importFile.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const importedItems = JSON.parse(e.target.result);
+        if (Array.isArray(importedItems)) {
+          if (importedItems.length > MAX_ITEMS) {
+            alert(`IMPORT FAILED: LIST EXCEEDS MAXIMUM OF ${MAX_ITEMS} ITEMS.`);
+            return;
+          }
+          // Validate all items are strings
+          if (!importedItems.every(i => typeof i === 'string')) {
+            alert('IMPORT FAILED: INVALID FILE FORMAT.');
+            return;
+          }
+          items = importedItems.map(i => i.toUpperCase());
+          saveItems();
+          currentPage = 1;
+          renderList();
+        } else {
+          alert('IMPORT FAILED: INVALID FILE FORMAT.');
+        }
+      } catch {
+        alert('IMPORT FAILED: INVALID JSON.');
+      }
+    };
+    reader.readAsText(file);
+    importFile.value = ''; // reset file input
+  });
+
+  // Initial render
+  renderList();
+</script>
 </body>
 </html>
