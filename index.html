@@ -278,7 +278,7 @@
 
   <div id="pagination" style="text-align:center; margin-top:1rem;">
     <button id="prevPage" disabled aria-label="Previous page"><</button>
-    <span id="pageInfo">0/100</span>
+    <span id="pageInfo">1/1</span>
     <button id="nextPage" aria-label="Next page">></button>
   </div>
 
@@ -327,7 +327,11 @@
       }
       const startCount = (currentPage - 1) * ITEMS_PER_PAGE + 1;
       const endCount = Math.min(currentPage * ITEMS_PER_PAGE, items.length);
-      progress.textContent = `${startCount}-${endCount}/1000`;
+
+      // Upper bound rounded up to next 100
+      const upperBound = Math.ceil(items.length / ITEMS_PER_PAGE) * ITEMS_PER_PAGE;
+
+      progress.textContent = `${startCount}-${endCount}/${upperBound}`;
     }
 
     function updatePagination() {
@@ -335,15 +339,9 @@
 
       if (totalPages > 1) {
         pageInfo.style.display = 'inline';
-        const startCount = (currentPage - 1) * ITEMS_PER_PAGE + 1;
-        const endCount = Math.min(currentPage * ITEMS_PER_PAGE, items.length);
-        pageInfo.textContent = `${startCount}-${endCount}/1000`;
+        pageInfo.textContent = `${currentPage}/${totalPages}`;
       } else {
-        if (items.length === 0) {
-          pageInfo.textContent = `0/100`;
-        } else {
-          pageInfo.textContent = `1-${items.length}/1000`;
-        }
+        pageInfo.style.display = 'none';
       }
 
       if (totalPages <= 1) {
