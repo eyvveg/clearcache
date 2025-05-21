@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -15,26 +16,29 @@
       line-height: 1.5;
       text-transform: uppercase;
     }
+
     p.tagline {
       text-align: center;
       font-style: normal;
-      font-size: 1.7rem; /* slightly bigger */
+      font-size: 1.7rem;
       color: #0078d4;
       margin-top: 0;
       margin-bottom: 2rem;
       letter-spacing: 0.05em;
     }
+
     #input-section {
       text-align: center;
       margin-bottom: 1rem;
     }
+
     input[type="text"] {
       width: 80%;
       padding: 0.6rem;
       font-size: 1rem;
-      border: none !important; /* <--- REMOVE BORDER */
-      outline: none !important; /* <--- REMOVE FOCUS OUTLINE */
-      box-shadow: none !important; /* <--- REMOVE SHADOW */
+      border: none !important;
+      outline: none !important;
+      box-shadow: none !important;
       box-sizing: border-box;
       text-transform: uppercase;
       color: #222;
@@ -45,12 +49,15 @@
       outline-color: transparent;
       transition: outline-color 0.2s ease;
     }
+
     input[type="text"]:focus {
-      outline-color: transparent; /* <--- REMOVE FOCUS COLOR */
-      outline: none !important; /* <--- REMOVE FOCUS OUTLINE */
-      box-shadow: none !important; /* <--- REMOVE SHADOW */
+      outline-color: transparent;
+      outline: none !important;
+      box-shadow: none !important;
     }
-    button, .link-button {
+
+    button,
+    .link-button {
       background: none;
       border: none;
       padding: 0;
@@ -59,15 +66,19 @@
       cursor: pointer;
       transition: color 0.3s ease;
     }
-    button:hover, .link-button:hover {
+
+    button:hover,
+    .link-button:hover {
       color: #004a8f;
     }
+
     #addBtn {
       color: #0078d4;
       font-size: 1.2rem;
       margin-left: 0.5rem;
       font-weight: normal;
     }
+
     ul {
       margin-top: 1.5rem;
       padding-left: 0;
@@ -77,9 +88,12 @@
       gap: 1rem 2rem;
       border-top: 1px solid #ccc;
       padding-top: 1rem;
-      max-height: 60vh;
-      overflow-y: auto;
+      max-height: none;
+      /* CHANGED: Allow full-page scroll */
+      overflow-y: visible;
+      /* CHANGED: Allow full-page scroll */
     }
+
     li {
       padding-left: 0.8rem;
       border-left: 4px solid #0078d4;
@@ -89,9 +103,11 @@
       word-break: break-word;
       cursor: pointer;
     }
+
     li:hover {
       background-color: #e6f0fa;
     }
+
     .progress {
       margin-top: 1.8rem;
       font-weight: 700;
@@ -100,20 +116,25 @@
       font-size: 0.9rem;
       letter-spacing: 0.1em;
     }
+
     #buttons-container {
       text-align: center;
       margin-top: 1.5rem;
     }
+
     #printBtn {
       color: #0078d4;
       font-size: 1.2rem;
       margin-bottom: 0.5rem;
     }
-    #exportBtn, #importBtn {
+
+    #exportBtn,
+    #importBtn {
       color: #0078d4;
       font-size: 0.9rem;
       margin: 0 1rem;
     }
+
     /* Style Clear List button like Export/Import (link-style) */
     #clearListBtn {
       color: #0078d4 !important;
@@ -128,20 +149,24 @@
       box-shadow: none !important;
       outline: none !important;
     }
+
     /* Remove focus and active outlines/box-shadow on Clear List */
     #clearListBtn:focus,
     #clearListBtn:active {
       outline: none !important;
       box-shadow: none !important;
     }
+
     /* Hover color for Clear List button */
     #clearListBtn:hover {
       color: #004a8f !important;
     }
+
     #pagination {
       margin-top: 1rem;
       text-align: center;
     }
+
     #pagination button {
       background: none;
       border: none;
@@ -153,20 +178,25 @@
       padding: 0 0.7rem;
       transition: color 0.3s ease;
     }
+
     #pagination button:disabled {
       opacity: 0.4;
       cursor: default;
     }
+
     #pagination button:hover:not(:disabled) {
       color: #004a8f;
     }
+
     #pageInfo {
       font-weight: 700;
       color: #0078d4;
       letter-spacing: 0.1em;
       margin: 0 1rem;
       font-size: 0.9rem;
+      display: none; /* Hidden initially, shown by JS if needed */
     }
+
     /* Responsive */
     @media (max-width: 700px) {
       ul {
@@ -174,25 +204,31 @@
         max-height: none;
         overflow-y: visible;
       }
+
       input[type="text"] {
         width: 100%;
         margin-bottom: 0.5rem;
       }
+
       #addBtn {
         margin-left: 0;
         width: 100%;
         font-size: 1.2rem;
         margin-top: 0.5rem;
       }
+
       #buttons-container {
         display: flex;
         flex-direction: column;
         align-items: center;
       }
-      #exportBtn, #importBtn {
+
+      #exportBtn,
+      #importBtn {
         margin: 0.3rem 0;
       }
     }
+
     /* Print styles */
     @media print {
       body {
@@ -203,6 +239,7 @@
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
         text-transform: uppercase;
       }
+
       ul {
         max-height: none;
         overflow: visible;
@@ -211,15 +248,22 @@
         border-top: none;
         padding-top: 0;
       }
+
       ul li {
         border-left: none !important;
       }
-      #buttons-container, #pagination, #input-section, .tagline, .progress {
+
+      #buttons-container,
+      #pagination,
+      #input-section,
+      .tagline,
+      .progress {
         display: none;
       }
     }
   </style>
 </head>
+
 <body>
   <p class="tagline">A tool for clarity</p>
 
@@ -230,9 +274,9 @@
 
   <ul id="joyList" aria-live="polite" aria-label="List of items"></ul>
 
-  <div class="progress" id="progress">0/100</div>
+  <div class="progress" id="progress">0/1000</div>
 
-  <div id="pagination">
+  <div id="pagination" style="text-align:center; margin-top:1rem;">
     <button id="prevPage" disabled aria-label="Previous page">←</button>
     <span id="pageInfo">1/1</span>
     <button id="nextPage" aria-label="Next page">→</button>
@@ -264,7 +308,7 @@
     const clearListBtn = document.getElementById('clearListBtn'); // NEW
 
     const ITEMS_PER_PAGE = 100;
-    const MAX_ITEMS = 100;
+    const MAX_ITEMS = 1000; // Increased to 1000
 
     let items = JSON.parse(localStorage.getItem('joyItems')) || [];
     let currentPage = 1;
@@ -277,26 +321,37 @@
     }
 
     function updateProgress() {
-      progress.textContent = `${items.length}/${MAX_ITEMS}`;
+      progress.textContent = `${items.length}/${MAX_ITEMS}`; // Updated for 1000
     }
 
     function updatePagination() {
       const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
-      if (totalPages <= 1) {
-        pageInfo.style.display = 'none';
-      } else {
+
+      // Show page info only if more than one page
+      if (totalPages > 1) {
         pageInfo.style.display = 'inline';
         pageInfo.textContent = `${currentPage}/${totalPages}`;
+      } else {
+        pageInfo.style.display = 'none';
       }
-      prevPageBtn.disabled = currentPage <= 1;
-      nextPageBtn.disabled = currentPage >= totalPages;
 
-      if (totalPages === 1) {
+      // Show/hide and enable/disable buttons based on current page
+      if (totalPages <= 1) {
         prevPageBtn.style.display = 'none';
         nextPageBtn.style.display = 'none';
+      } else if (currentPage === 1) {
+        prevPageBtn.style.display = 'none';
+        nextPageBtn.style.display = 'inline';
+        nextPageBtn.disabled = false;
+      } else if (currentPage === totalPages) {
+        prevPageBtn.style.display = 'inline';
+        nextPageBtn.style.display = 'none';
+        prevPageBtn.disabled = false;
       } else {
-        prevPageBtn.style.display = currentPage <= 1 ? 'none' : 'inline';
-        nextPageBtn.style.display = currentPage >= totalPages ? 'none' : 'inline';
+        prevPageBtn.style.display = 'inline';
+        nextPageBtn.style.display = 'inline';
+        prevPageBtn.disabled = false;
+        nextPageBtn.disabled = false;
       }
     }
 
@@ -317,7 +372,10 @@
             const trimmed = action.trim();
             if (trimmed === '') {
               // Save deleted item for undo stack
-              undoStack.push({ item: items[index], index });
+              undoStack.push({
+                item: items[index],
+                index
+              });
               items.splice(index, 1);
               saveItems();
               const newTotalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
@@ -388,7 +446,9 @@
         return;
       }
       const dataStr = JSON.stringify(items);
-      const blob = new Blob([dataStr], { type: "application/json" });
+      const blob = new Blob([dataStr], {
+        type: "application/json"
+      });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -437,7 +497,10 @@
     // Undo function
     function undoDelete() {
       if (undoStack.length === 0) return;
-      const { item, index } = undoStack.pop();
+      const {
+        item,
+        index
+      } = undoStack.pop();
       items.splice(index, 0, item);
       saveItems();
       const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
@@ -468,4 +531,5 @@
     renderList();
   </script>
 </body>
+
 </html>
