@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Clear Cache</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1rem;
+      background: #f9f9f9;
+      color: #333;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    p.tagline {
+      text-align: center;
+      font-style: italic;
+      color: #555;
+    }
+    input[type="text"] {
+      width: 80%;
+      padding: 0.5rem;
+      font-size: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      background-color: #2980b9;
+      color: white;
+      border: none;
+      border-radius: 4px;
+    }
+    ul {
+      margin-top: 1rem;
+      padding-left: 1.2rem;
+    }
+    li {
+      margin: 0.3rem 0;
+    }
+    .progress {
+      margin-top: 1rem;
+      font-weight: bold;
+      color: #2980b9;
+      text-align: center;
+    }
+    #printBtn {
+      display: block;
+      margin: 1.5rem auto 0;
+      background-color: #27ae60;
+    }
+  </style>
+</head>
+<body>
+  <h1>Clear Cache</h1>
+  <p class="tagline">Clear the noise. List what matters.</p>
+
+  <input type="text" id="itemInput" placeholder="Enter something you enjoy..." />
+  <button id="addBtn">Add</button>
+
+  <ul id="joyList"></ul>
+  <div class="progress" id="progress">0 / 100</div>
+
+  <button id="printBtn">Print Your List</button>
+
+  <script>
+    const input = document.getElementById('itemInput');
+    const addBtn = document.getElementById('addBtn');
+    const joyList = document.getElementById('joyList');
+    const progress = document.getElementById('progress');
+    const printBtn = document.getElementById('printBtn');
+
+    let items = JSON.parse(localStorage.getItem('joyItems')) || [];
+
+    function updateProgress() {
+      progress.textContent = `${items.length} / 100`;
+    }
+
+    function renderList() {
+      joyList.innerHTML = '';
+      items.forEach(item => {
+        const li = document.createElement('li');
+        li.textContent = item;
+        joyList.appendChild(li);
+      });
+      updateProgress();
+    }
+
+    function addItem() {
+      const text = input.value.trim();
+      if (text && items.length < 100) {
+        items.push(text);
+        localStorage.setItem('joyItems', JSON.stringify(items));
+        renderList();
+        input.value = '';
+      }
+      input.focus();
+    }
+
+    addBtn.addEventListener('click', addItem);
+    input.addEventListener('keydown', e => {
+      if (e.key === 'Enter') addItem();
+    });
+
+    printBtn.addEventListener('click', () => {
+      if (items.length === 0) {
+        alert('Your list is empty!');
+        return;
+      }
+      window.print();
+    });
+
+    renderList();
+  </script>
+</body>
+</html>
