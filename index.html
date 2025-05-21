@@ -185,7 +185,7 @@
       padding-top: 0;
     }
     ul li {
-      border-left: none !important; /* remove blue bar on print */
+      border-left: none !important;
     }
     #buttons-container, #pagination, #input-section, .tagline, .progress {
       display: none;
@@ -247,7 +247,12 @@
 
   function updatePagination() {
     const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
-    pageInfo.textContent = `${currentPage}/${totalPages}`;
+    if (totalPages <= 1) {
+      pageInfo.style.display = 'none';
+    } else {
+      pageInfo.style.display = 'inline';
+      pageInfo.textContent = `${currentPage}/${totalPages}`;
+    }
     prevPageBtn.disabled = currentPage <= 1;
     nextPageBtn.disabled = currentPage >= totalPages;
 
@@ -262,11 +267,13 @@
 
   function renderList() {
     joyList.innerHTML = '';
+    const totalItems = items.length;
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
     const start = (currentPage - 1) * ITEMS_PER_PAGE;
-    const end = Math.min(start + ITEMS_PER_PAGE, items.length);
+    const end = Math.min(start + ITEMS_PER_PAGE, totalItems);
     for (let i = start; i < end; i++) {
       const li = document.createElement('li');
-      li.textContent = items[i].toUpperCase();
+      li.textContent = `${i + 1}/${totalItems} - ${items[i].toUpperCase()}`;
       li.title = "Click to edit or remove";
       ((index) => {
         li.addEventListener('click', () => {
@@ -274,13 +281,12 @@
           if (action === null) return; // Cancelled
           const trimmed = action.trim();
           if (trimmed === '') {
-            if (confirm('Are you sure you want to delete this item?')) {
-              items.splice(index, 1);
-              saveItems();
-              const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
-              if (currentPage > totalPages) currentPage = totalPages;
-              renderList();
-            }
+            // Delete without confirmation
+            items.splice(index, 1);
+            saveItems();
+            const newTotalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+            if (currentPage > newTotalPages) currentPage = newTotalPages;
+            renderList();
           } else {
             items[index] = trimmed.toUpperCase();
             saveItems();
