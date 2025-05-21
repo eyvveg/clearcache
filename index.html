@@ -184,6 +184,9 @@
       border-top: none;
       padding-top: 0;
     }
+    ul li {
+      border-left: none !important; /* remove blue bar on print */
+    }
     #buttons-container, #pagination, #input-section, .tagline, .progress {
       display: none;
     }
@@ -267,10 +270,10 @@
       li.title = "Click to edit or remove";
       ((index) => {
         li.addEventListener('click', () => {
-          const action = prompt(items[index]);
+          const action = prompt('Modify item (leave empty to delete):');
           if (action === null) return; // Cancelled
           const trimmed = action.trim();
-          if (trimmed.toUpperCase() === 'DELETE') {
+          if (trimmed === '') {
             if (confirm('Are you sure you want to delete this item?')) {
               items.splice(index, 1);
               saveItems();
@@ -278,7 +281,7 @@
               if (currentPage > totalPages) currentPage = totalPages;
               renderList();
             }
-          } else if (trimmed.length > 0) {
+          } else {
             items[index] = trimmed.toUpperCase();
             saveItems();
             renderList();
