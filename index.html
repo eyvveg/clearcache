@@ -6,101 +6,153 @@
   <title>Clear Cache</title>
   <style>
     body {
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      max-width: 600px;
+      font-family: "Courier New", Courier, monospace;
+      max-width: 900px;
       margin: 3rem auto;
       padding: 1rem 2rem;
-      background: #f9f9f9;
-      color: #222;
-      line-height: 1.5;
+      background: #f5f7fa;
+      color: #1b263b;
+      line-height: 1.6;
+      text-transform: uppercase;
     }
     h1 {
-      font-size: 3.2rem;
+      font-size: 3.5rem;
       font-weight: 700;
       text-align: center;
-      margin-bottom: 0.2rem;
-      color: #111;
+      margin-bottom: 0.3rem;
+      color: #0d1b2a;
+      letter-spacing: 0.1em;
     }
     p.tagline {
       text-align: center;
       font-style: normal;
-      font-size: 1.25rem;
-      color: #555;
+      font-size: 1.3rem;
+      color: #415a77;
       margin-top: 0;
       margin-bottom: 2rem;
-      letter-spacing: 0.02em;
+      letter-spacing: 0.05em;
     }
     input[type="text"] {
       width: 80%;
-      padding: 0.5rem;
+      padding: 0.6rem;
       font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 3px;
+      border: 1px solid #415a77;
+      border-radius: 4px;
       box-sizing: border-box;
+      text-transform: uppercase;
+      color: #1b263b;
+      background: #e0e6f0;
+      font-weight: 600;
+      letter-spacing: 0.05em;
     }
     button {
-      padding: 0.5rem 1rem;
+      padding: 0.6rem 1.2rem;
       font-size: 1rem;
       margin-left: 0.5rem;
       cursor: pointer;
-      background-color: #0078d4;
-      color: white;
+      background-color: #1b263b;
+      color: #f0f4f8;
       border: none;
-      border-radius: 3px;
+      border-radius: 4px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
       transition: background-color 0.3s ease;
+      text-transform: uppercase;
     }
     button:hover {
-      background-color: #005a9e;
+      background-color: #415a77;
     }
     ul {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       padding-left: 0;
-      list-style: none; /* Removes bullets */
-      border-top: 1px solid #ccc;
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem 2rem;
+      border-top: 1px solid #415a77;
       padding-top: 1rem;
+      max-height: 70vh;
+      overflow-y: auto;
     }
     li {
-      margin: 0.5rem 0;
-      padding-left: 0.5rem;
-      border-left: 3px solid #0078d4;
-      color: #333;
-      font-weight: 500;
+      padding-left: 0.8rem;
+      border-left: 4px solid #1b263b;
+      color: #0d1b2a;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      word-break: break-word;
     }
     .progress {
-      margin-top: 1.5rem;
-      font-weight: 600;
-      color: #0078d4;
+      margin-top: 1.8rem;
+      font-weight: 700;
+      color: #1b263b;
       text-align: center;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
+      letter-spacing: 0.1em;
     }
     #printBtn {
       display: block;
-      margin: 2rem auto 0;
-      background-color: #107c10;
-      padding: 0.6rem 1.2rem;
-      font-weight: 600;
-      border-radius: 3px;
+      margin: 2.5rem auto 0;
+      background-color: #0d1b2a;
+      padding: 0.7rem 1.5rem;
+      font-weight: 700;
+      border-radius: 4px;
       border: none;
-      color: white;
+      color: #f0f4f8;
       cursor: pointer;
       transition: background-color 0.3s ease;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
     #printBtn:hover {
-      background-color: #0b5a07;
+      background-color: #415a77;
+    }
+    /* Scrollbar for the list */
+    ul::-webkit-scrollbar {
+      width: 8px;
+    }
+    ul::-webkit-scrollbar-thumb {
+      background-color: #415a77;
+      border-radius: 4px;
+    }
+    ul::-webkit-scrollbar-track {
+      background: #e0e6f0;
+    }
+    /* Print styles */
+    @media print {
+      body {
+        max-width: 100%;
+        margin: 0.5in;
+        background: white;
+        color: black;
+        font-family: "Courier New", Courier, monospace;
+        text-transform: uppercase;
+      }
+      ul {
+        max-height: none;
+        overflow: visible;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem 2rem;
+        border-top: none;
+        padding-top: 0;
+      }
+      #printBtn, input, button {
+        display: none;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>I Enjoy</h1>
-  <p class="tagline">Clear the noise. Focus on what matters.</p>
+  <h1>I ENJOY</h1>
+  <p class="tagline">CLEAR THE NOISE. FOCUS ON WHAT MATTERS.</p>
 
-  <input type="text" id="itemInput" placeholder="Enter something you enjoy..." />
-  <button id="addBtn">Add</button>
+  <input type="text" id="itemInput" placeholder="ENTER SOMETHING YOU ENJOY..." />
+  <button id="addBtn">ADD</button>
 
   <ul id="joyList"></ul>
   <div class="progress" id="progress">0 / 100</div>
 
-  <button id="printBtn">Print Your List</button>
+  <button id="printBtn">PRINT YOUR LIST</button>
 
   <script>
     const input = document.getElementById('itemInput');
@@ -119,7 +171,7 @@
       joyList.innerHTML = '';
       items.forEach(item => {
         const li = document.createElement('li');
-        li.textContent = item;
+        li.textContent = item.toUpperCase();
         joyList.appendChild(li);
       });
       updateProgress();
@@ -128,7 +180,7 @@
     function addItem() {
       const text = input.value.trim();
       if (text && items.length < 100) {
-        items.push(text);
+        items.push(text.toUpperCase());
         localStorage.setItem('joyItems', JSON.stringify(items));
         renderList();
         input.value = '';
@@ -143,7 +195,7 @@
 
     printBtn.addEventListener('click', () => {
       if (items.length === 0) {
-        alert('Your list is empty!');
+        alert('YOUR LIST IS EMPTY!');
         return;
       }
       window.print();
