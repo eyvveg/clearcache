@@ -18,7 +18,7 @@
   p.tagline {
     text-align: center;
     font-style: normal;
-    font-size: 1.6rem;
+    font-size: 1.7rem; /* slightly bigger */
     color: #0078d4;
     margin-top: 0;
     margin-bottom: 2rem;
@@ -249,3 +249,181 @@
   }
 
   function updatePagination() {
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+    if (totalPages <= 1) {
+      pageInfo.style.display = 'none';
+    } else {
+      pageInfo.style.display = 'inline';
+      pageInfo.textContent = `${currentPage}/${totalPages}`;
+    }
+    prevPageBtn.disabled = currentPage <= 1;
+    nextPageBtn.disabled = currentPage >= totalPages;
+
+    if (totalPages === 1) {
+      prevPageBtn.style.display = 'none';
+      nextPageBtn.style.display = 'none';
+    } else {
+      prevPageBtn.style.display = currentPage <= 1 ? 'none' : 'inline';
+      nextPageBtn.style.display = currentPage >= totalPages ? 'none' : 'inline';
+    }
+  }
+
+  function renderList() {
+    joyList.innerHTML = '';
+    const totalItems = items.length;
+    const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE) || 1;
+    const start = (currentPage - 1) * ITEMS_PER_PAGE;
+    const end = Math.min(start + ITEMS_PER_PAGE, totalItems);
+    for (let i = start; i < end; i++) {
+      const li = document.createElement('li');
+      li.textContent = items[i].toUpperCase();
+      li.title = "Click to edit or remove";
+      ((index) => {
+        li.addEventListener('click', () => {
+          const action = prompt('Modify item (leave empty to delete):');
+          if (action === null) return; // Cancelled
+          const trimmed = action.trim();
+          if (trimmed === '') {
+            // Save deleted item for undo stack
+            undoStack.push({ item: items[index], index });
+            items.splice(index, 1);
+            saveItems();
+            const newTotalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+            if (currentPage > newTotalPages) currentPage = newTotalPages;
+            renderList();
+          } else {
+            items[index] = trimmed.toUpperCase();
+            saveItems();
+            renderList();
+          }
+        });
+      })(i);
+      joyList.appendChild(li);
+    }
+    updateProgress();
+    updatePagination();
+  }
+
+  function addItem() {
+    const text = input.value.trim().toUpperCase();
+    if (!text) {
+      alert('PLEASE ENTER SOMETHING YOU ENJOY.');
+      return;
+    }
+    if (items.length >= MAX_ITEMS) {
+      alert(`MAXIMUM OF ${MAX_ITEMS} ITEMS REACHED.`);
+      return;
+    }
+    items.push(text);
+    saveItems();
+    input.value = '';
+    currentPage = Math.ceil(items.length / ITEMS_PER_PAGE);
+    renderList();
+    input.focus();
+  }
+
+  addBtn.addEventListener('click', addItem);
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') addItem();
+  });
+
+  prevPageBtn.addEventListener('click', () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderList();
+    }
+  });
+
+  nextPageBtn.addEventListener('click', () => {
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE);
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderList();
+    }
+  });
+
+  printBtn.addEventListener('click', () => {
+    if (items.length === 0) {
+      alert('YOUR LIST IS EMPTY!');
+      return;
+    }
+    window.print();
+  });
+
+  exportBtn.addEventListener('click', () => {
+    if (items.length === 0) {
+      alert('YOUR LIST IS EMPTY!');
+      return;
+    }
+    const dataStr = JSON.stringify(items);
+    const blob = new Blob([dataStr], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'joylist.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+
+  importBtn.addEventListener('click', () => {
+    importFile.click();
+  });
+
+  importFile.addEventListener('change', () => {
+    const file = importFile.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const importedItems = JSON.parse(e.target.result);
+        if (Array.isArray(importedItems)) {
+          if (importedItems.length > MAX_ITEMS) {
+            alert(`IMPORT FAILED: LIST EXCEEDS MAXIMUM OF ${MAX_ITEMS} ITEMS.`);
+            return;
+          }
+          if (!importedItems.every(i => typeof i === 'string')) {
+            alert('IMPORT FAILED: INVALID FILE FORMAT.');
+            return;
+          }
+          items = importedItems.map(i => i.toUpperCase());
+          saveItems();
+          currentPage = 1;
+          renderList();
+        } else {
+          alert('IMPORT FAILED: INVALID FILE FORMAT.');
+        }
+      } catch {
+        alert('IMPORT FAILED: INVALID JSON.');
+      }
+    };
+    reader.readAsText(file);
+    importFile.value = ''; // reset file input
+  });
+
+  // Undo function
+  function undoDelete() {
+    if (undoStack.length === 0) return;
+    const { item, index } = undoStack.pop();
+    items.splice(index, 0, item);
+    saveItems();
+    const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    renderList();
+  }
+
+  // Listen for Ctrl+Z / Cmd+Z for undo
+  window.addEventListener('keydown', (e) => {
+    const isUndo = (e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'z';
+    if (isUndo) {
+      e.preventDefault();
+      undoDelete();
+    }
+  });
+
+  // Initial render
+  renderList();
+</script>
+</body>
+</html>
