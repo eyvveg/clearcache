@@ -135,7 +135,7 @@
       margin: 0 1rem;
     }
 
-    /* Style Clear List button like Export/Import (link-style) */
+    /* Style Clear button like Export/Import (link-style) */
     #clearListBtn {
       color: #0078d4 !important;
       font-size: 0.9rem !important;
@@ -150,14 +150,14 @@
       outline: none !important;
     }
 
-    /* Remove focus and active outlines/box-shadow on Clear List */
+    /* Remove focus and active outlines/box-shadow on Clear */
     #clearListBtn:focus,
     #clearListBtn:active {
       outline: none !important;
       box-shadow: none !important;
     }
 
-    /* Hover color for Clear List button */
+    /* Hover color for Clear button */
     #clearListBtn:hover {
       color: #004a8f !important;
     }
@@ -287,9 +287,9 @@
     <button id="exportBtn" class="link-button">EXPORT</button>
     <button id="importBtn" class="link-button">IMPORT</button>
     <input type="file" id="importFile" accept=".json" style="display:none" />
-    <!-- CLEAR LIST BUTTON ADDED BELOW EXPORT/IMPORT -->
+    <!-- CLEAR BUTTON ADDED BELOW EXPORT/IMPORT -->
     <div style="margin-top:1.2rem; text-align:center;">
-      <button id="clearListBtn">CLEAR LIST</button>
+      <button id="clearListBtn">CLEAR</button>
     </div>
   </div>
 
@@ -526,7 +526,7 @@
       }
     });
 
-    // CLEAR LIST BUTTON FUNCTIONALITY
+    // CLEAR BUTTON FUNCTIONALITY
     clearListBtn.addEventListener('click', () => {
       if (confirm('Are you sure you want to clear the entire list?')) {
         items = [];
