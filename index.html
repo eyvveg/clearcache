@@ -15,14 +15,6 @@
     line-height: 1.5;
     text-transform: uppercase;
   }
-  h1 {
-    font-size: 3.5rem;
-    font-weight: 700;
-    text-align: center;
-    margin-bottom: 0.2rem;
-    color: #111;
-    letter-spacing: 0.1em;
-  }
   p.tagline {
     text-align: center;
     font-style: normal;
@@ -55,21 +47,30 @@
   input[type="text"]:focus {
     outline-color: #0078d4;
   }
-  button {
-    padding: 0.6rem 1.2rem;
+  button, .link-button {
+    background: none;
+    border: none;
+    padding: 0;
     font-size: 1rem;
     cursor: pointer;
-    background-color: transparent;
     color: #0078d4;
-    border: 2px solid #0078d4;
-    border-radius: 4px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    margin-left: 0.5rem;
+    transition: color 0.3s ease;
   }
-  button:hover {
+  button:hover, .link-button:hover {
+    color: #004a8f;
+  }
+  #addBtn {
+    margin-left: 0.5rem;
+    border: 2px solid #0078d4;
+    padding: 0.6rem 1.2rem;
+    border-radius: 4px;
+    background-color: transparent;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  #addBtn:hover {
     background-color: #0078d4;
     color: white;
   }
@@ -101,48 +102,42 @@
     font-size: 1.2rem;
     letter-spacing: 0.1em;
   }
-  #printBtn, #exportBtn, #importBtn {
-    display: inline-block;
-    margin: 1.5rem 0.5rem 0 0;
-    background-color: transparent;
-    color: #0078d4;
-    border: 2px solid #0078d4;
-    padding: 0.7rem 1.5rem;
-    font-weight: 700;
-    border-radius: 4px;
-    cursor: pointer;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    transition: background-color 0.3s ease, color 0.3s ease;
+  #buttons-container {
+    text-align: center;
+    margin-top: 1.5rem;
   }
-  #printBtn:hover, #exportBtn:hover, #importBtn:hover {
-    background-color: #0078d4;
-    color: white;
+  #buttons-container button {
+    margin: 0 1rem;
   }
   #pagination {
     margin-top: 1rem;
     text-align: center;
   }
   #pagination button {
-    margin: 0 0.5rem;
-    background-color: transparent;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
     color: #0078d4;
-    border: 2px solid #0078d4;
-    padding: 0.4rem 1rem;
-    border-radius: 4px;
     font-weight: 700;
     letter-spacing: 0.1em;
     text-transform: uppercase;
-    cursor: pointer;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    padding: 0 0.7rem;
+    transition: color 0.3s ease;
   }
   #pagination button:disabled {
     opacity: 0.4;
     cursor: default;
   }
   #pagination button:hover:not(:disabled) {
-    background-color: #0078d4;
-    color: white;
+    color: #004a8f;
+  }
+  #pageInfo {
+    font-weight: 700;
+    color: #0078d4;
+    letter-spacing: 0.1em;
+    margin: 0 1rem;
+    font-size: 1.1rem;
   }
   /* Responsive */
   @media (max-width: 700px) {
@@ -159,15 +154,10 @@
       margin-left: 0;
       width: 100%;
     }
-    #buttons-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      justify-content: center;
-    }
-    #printBtn, #exportBtn, #importBtn {
+    #buttons-container button {
+      margin: 0.5rem 0;
+      display: block;
       width: 100%;
-      margin: 0.5rem 0 0 0;
     }
   }
   /* Print styles */
@@ -188,15 +178,14 @@
       border-top: none;
       padding-top: 0;
     }
-    #printBtn, #exportBtn, #importBtn, #pagination, #input-section {
+    #buttons-container, #pagination, #input-section {
       display: none;
     }
   }
 </style>
 </head>
 <body>
-  <h1>CLEAR CACHE</h1>
-  <p class="tagline">A TOOL FOR CLARITY.</p>
+  <p class="tagline">A tool for clarity</p>
 
   <div id="input-section" style="text-align:center;">
     <input type="text" id="itemInput" placeholder="I ENJOY..." aria-label="Item input" />
@@ -205,18 +194,18 @@
 
   <ul id="joyList" aria-live="polite" aria-label="List of items"></ul>
 
-  <div class="progress" id="progress">0 / 1000</div>
+  <div class="progress" id="progress">0 / 100</div>
 
   <div id="pagination">
-    <button id="prevPage" disabled>PREVIOUS</button>
-    <span id="pageInfo">Page 1 of 10</span>
-    <button id="nextPage">NEXT</button>
+    <button id="prevPage" disabled aria-label="Previous page">←</button>
+    <span id="pageInfo">1 / 1</span>
+    <button id="nextPage" aria-label="Next page">→</button>
   </div>
 
-  <div id="buttons-container" style="text-align:center;">
-    <button id="printBtn">PRINT YOUR LIST</button>
-    <button id="exportBtn">EXPORT LIST</button>
-    <button id="importBtn">IMPORT LIST</button>
+  <div id="buttons-container">
+    <button id="printBtn" class="link-button">PRINT YOUR LIST</button>
+    <button id="exportBtn" class="link-button">EXPORT LIST</button>
+    <button id="importBtn" class="link-button">IMPORT LIST</button>
     <input type="file" id="importFile" accept=".json" style="display:none" />
   </div>
 
@@ -249,7 +238,7 @@
 
   function updatePagination() {
     const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
-    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    pageInfo.textContent = `${currentPage} / ${totalPages}`;
     prevPageBtn.disabled = currentPage <= 1;
     nextPageBtn.disabled = currentPage >= totalPages;
   }
