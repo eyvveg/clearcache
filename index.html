@@ -89,9 +89,9 @@
       border-top: 1px solid #ccc;
       padding-top: 1rem;
       max-height: none;
-      /* CHANGED: Allow full-page scroll */
+      /* Allow full-page scroll */
       overflow-y: visible;
-      /* CHANGED: Allow full-page scroll */
+      /* Allow full-page scroll */
     }
 
     li {
@@ -194,7 +194,7 @@
       letter-spacing: 0.1em;
       margin: 0 1rem;
       font-size: 0.9rem;
-      display: none; /* Hidden initially, shown by JS if needed */
+      display: inline;
     }
 
     /* Responsive */
@@ -274,12 +274,12 @@
 
   <ul id="joyList" aria-live="polite" aria-label="List of items"></ul>
 
-  <div class="progress" id="progress">0/1000</div>
+  <div class="progress" id="progress">0/100</div>
 
   <div id="pagination" style="text-align:center; margin-top:1rem;">
-    <button id="prevPage" disabled aria-label="Previous page">←</button>
-    <span id="pageInfo">1/1</span>
-    <button id="nextPage" aria-label="Next page">→</button>
+    <button id="prevPage" disabled aria-label="Previous page"><</button>
+    <span id="pageInfo">0/100</span>
+    <button id="nextPage" aria-label="Next page">></button>
   </div>
 
   <div id="buttons-container">
@@ -305,10 +305,10 @@
     const prevPageBtn = document.getElementById('prevPage');
     const nextPageBtn = document.getElementById('nextPage');
     const pageInfo = document.getElementById('pageInfo');
-    const clearListBtn = document.getElementById('clearListBtn'); // NEW
+    const clearListBtn = document.getElementById('clearListBtn');
 
     const ITEMS_PER_PAGE = 100;
-    const MAX_ITEMS = 1000; // Increased to 1000
+    const MAX_ITEMS = 1000;
 
     let items = JSON.parse(localStorage.getItem('joyItems')) || [];
     let currentPage = 1;
@@ -321,21 +321,31 @@
     }
 
     function updateProgress() {
-      progress.textContent = `${items.length}/${MAX_ITEMS}`; // Updated for 1000
+      if (items.length === 0) {
+        progress.textContent = `0/100`;
+        return;
+      }
+      const startCount = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+      const endCount = Math.min(currentPage * ITEMS_PER_PAGE, items.length);
+      progress.textContent = `${startCount}-${endCount}/1000`;
     }
 
     function updatePagination() {
       const totalPages = Math.ceil(items.length / ITEMS_PER_PAGE) || 1;
 
-      // Show page info only if more than one page
       if (totalPages > 1) {
         pageInfo.style.display = 'inline';
-        pageInfo.textContent = `${currentPage}/${totalPages}`;
+        const startCount = (currentPage - 1) * ITEMS_PER_PAGE + 1;
+        const endCount = Math.min(currentPage * ITEMS_PER_PAGE, items.length);
+        pageInfo.textContent = `${startCount}-${endCount}/1000`;
       } else {
-        pageInfo.style.display = 'none';
+        if (items.length === 0) {
+          pageInfo.textContent = `0/100`;
+        } else {
+          pageInfo.textContent = `1-${items.length}/1000`;
+        }
       }
 
-      // Show/hide and enable/disable buttons based on current page
       if (totalPages <= 1) {
         prevPageBtn.style.display = 'none';
         nextPageBtn.style.display = 'none';
@@ -371,7 +381,6 @@
             if (action === null) return; // Cancelled
             const trimmed = action.trim();
             if (trimmed === '') {
-              // Save deleted item for undo stack
               undoStack.push({
                 item: items[index],
                 index
